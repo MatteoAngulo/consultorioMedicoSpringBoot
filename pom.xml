@@ -7,27 +7,35 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- ========== PARENT SPRING BOOT ========== -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
-        <relativePath/>
+        <version>3.4.4</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
-    <!-- ========== DATOS DEL PROYECTO ========== -->
     <groupId>edu.unimagdalena</groupId>
-    <artifactId>aerolineas</artifactId>
+    <artifactId>consultorioMedico</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>aerolineas</name>
-    <description>aerolineas</description>
-
+    <name>consultorioMedico</name>
+    <description>consultorioMedico</description>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
     <properties>
         <java.version>17</java.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
-    </properties>
 
-    <!-- ========== DEPENDENCIAS ========== -->
+    </properties>
     <dependencies>
         <!-- Spring Data JPA -->
         <dependency>
