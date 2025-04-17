@@ -1,45 +1,37 @@
 package edu.unimagdalena.consultoriomedico.entities;
 
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.validation.*;
 
 import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-public class Patient {
+@Builder
+
+public class ConsultRoom {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPatient;
+    private int idConsultRoom;
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "consultRoom")
     private List<Appointment> appointments;
-
-    @OneToMany(mappedBy = "patient")
-    private List<MedicalRecord> medicalRecords;
 
     @Column(nullable = false)
     @NotBlank
-    private String name;
+    private String roomNumber;
 
     @Column(nullable = false)
-    @Email
-    private String email;
+    @Positive
+    private String capacity;
 
-    @Column(nullable = false)
-    @NotNull
-    private String phone;
-
+    @Column
+    private String roomType;
 }

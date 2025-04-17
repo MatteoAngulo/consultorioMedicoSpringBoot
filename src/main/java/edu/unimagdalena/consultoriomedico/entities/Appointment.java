@@ -33,6 +33,9 @@ public class Appointment {
     @JoinColumn(name = "id_consultRoom", referencedColumnName = "idConsultRoom")
     private ConsultRoom consultRoom;
 
+    @OneToOne(mappedBy = "appointment")
+    private MedicalRecord medicalRecord;
+
     @Column(nullable = false)
     @Future
     private LocalDateTime date;
