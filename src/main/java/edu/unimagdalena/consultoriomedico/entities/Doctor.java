@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -31,16 +33,18 @@ public class Doctor {
     private String fullName;
 
     @Column(nullable = false)
-    @NotBlank
-    private String speciality;
-
-    @Column(nullable = false)
     @Email
     private String email;
 
     @Column(nullable = false)
-    @Size(min = 5)
-    private String licenseNumber;
+    @NotBlank
+    private String speciality;
+
+    @Column(nullable = false)
+    private LocalTime availableFrom;
+
+    @Column(nullable = false)
+    private LocalTime availableTo;
 
 
 

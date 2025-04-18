@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +35,9 @@ public class MedicalRecord {
 
     @Column
     @Size(max = 100)
-    private String treatment;
+    private String notes;
+
+    @Column
+    private LocalDateTime createdAt;
 
 }

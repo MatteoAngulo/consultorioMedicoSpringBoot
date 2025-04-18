@@ -32,7 +32,7 @@ public class Patient {
 
     @Column(nullable = false)
     @NotBlank
-    private String name;
+    private String fullName;
 
     @Column(nullable = false)
     @Email

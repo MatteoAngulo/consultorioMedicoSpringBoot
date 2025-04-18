@@ -3,6 +3,7 @@ package edu.unimagdalena.consultoriomedico.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,12 +27,13 @@ public class ConsultRoom {
 
     @Column(nullable = false)
     @NotBlank
-    private String roomNumber;
+    private String name;
 
     @Column(nullable = false)
     @Positive
-    private String capacity;
+    private String floor;
 
     @Column
-    private String roomType;
+    @Size(max = 1000)
+    private String description;
 }
