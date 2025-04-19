@@ -34,19 +34,19 @@ class PatientRepositoryTest {
 
     @Test
     void shouldSaveAndFindPatient(){
-        Patient patient = Patient.builder().name("Pedro Pérez").email("prueba@test.com").phone("3204567890").build();
+        Patient patient = Patient.builder().fullName("Pedro Pérez").email("prueba@test.com").phone("3204567890").build();
         Patient saved = patientRepository.save(patient);
 
         Optional<Patient> result = patientRepository.findById(saved.getIdPatient());
 
-        Assertions.assertEquals("Pedro Pérez", result.get().getName());
+        Assertions.assertEquals("Pedro Pérez", result.get().getFullName());
         Assertions.assertTrue(result.isPresent());
     }
 
     @Test
     void shouldFindAllPatient(){
-        patientRepository.save(Patient.builder().name("Andrés Escobar").email("test@gmail.com").phone("3103334455").build());
-        patientRepository.save(Patient.builder().name("Mateo Angulo").email("mateo@test.com").phone("3001112233").build());
+        patientRepository.save(Patient.builder().fullName("Andrés Escobar").email("test@gmail.com").phone("3103334455").build());
+        patientRepository.save(Patient.builder().fullName("Mateo Angulo").email("mateo@test.com").phone("3001112233").build());
 
         List<Patient> patients = patientRepository.findAll();
 
@@ -57,8 +57,7 @@ class PatientRepositoryTest {
     @Test
     void findByEmail() {
 
-        Patient patient = Patient.builder().name("Pedro Pérez").email("prueba@test.com").phone("3204567890").build();
-        Patient patient2 = Patient.builder().name("Juan Camilo").email("pilar@test.com").phone("3204567800").build();
+        Patient patient2 = Patient.builder().fullName("Juan Camilo").email("pilar@test.com").phone("3204567800").build();
 
         patientRepository.save(patient2);
         Patient result = patientRepository.findByEmail("pilar@test.com");
@@ -69,7 +68,7 @@ class PatientRepositoryTest {
 
     @Test
     void shouldUpdatePatient(){
-        Patient patient = Patient.builder().name("Pedro Pérez").email("prueba@test.com").phone("3204567890").build();
+        Patient patient = Patient.builder().fullName("Pedro Pérez").email("prueba@test.com").phone("3204567890").build();
         patient.setPhone("3103838223");
         Patient result = patientRepository.save(patient);
         Assertions.assertEquals("3103838223", result.getPhone());
@@ -78,7 +77,7 @@ class PatientRepositoryTest {
 
     @Test
     void shouldDeletePatient(){
-        Patient patient = Patient.builder().name("Pedro Pérez").email("prueba@test.com").phone("3204567890").build();
+        Patient patient = Patient.builder().fullName("Pedro Pérez").email("prueba@test.com").phone("3204567890").build();
         Patient saved = patientRepository.save(patient);
         Long id = saved.getIdPatient();
         patientRepository.deleteById(id);
