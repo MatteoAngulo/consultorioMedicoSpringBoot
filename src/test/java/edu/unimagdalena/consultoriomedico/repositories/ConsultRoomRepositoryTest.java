@@ -96,6 +96,6 @@ class ConsultRoomRepositoryTest {
 
         assertFalse(consultRoomRepository.findById(id).isPresent());
 
-        
+
     }
 }
