@@ -20,7 +20,7 @@ import java.util.List;
 public class ConsultRoom {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idConsultRoom;
+    private Long idConsultRoom;
 
     @OneToMany(mappedBy = "consultRoom")
     private List<Appointment> appointments;
