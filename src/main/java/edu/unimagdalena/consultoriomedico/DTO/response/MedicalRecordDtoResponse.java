@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public record MedicalRecordDtoResponse(
         Long idMedicalRecord,
-        PatientDtoResponse patient,
-        AppointmentDtoResponse appointment,
+        Long idPatient,
+        Long idAppointment,
         String diagnosis,
         String notes,
         LocalDateTime createdAt

@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Builder
+@Table(name = "medical_record")
 public class MedicalRecord {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

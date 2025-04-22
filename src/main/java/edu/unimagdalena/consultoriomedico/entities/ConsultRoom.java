@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-
+@Table(name = "consult_room")
 public class ConsultRoom {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
