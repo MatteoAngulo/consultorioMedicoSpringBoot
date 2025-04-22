@@ -10,10 +10,25 @@ import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-    @Query("SELECT a FROM Appointment a WHERE a.consultRoom.idConsultRoom = :consult_room_id AND (a.startTime < :end_time AND a.endTime > :start_time)")
-    List<Appointment> findConflicts(@Param("id_consult_room") Long idConsultRoom,
-                                    @Param("start_time") LocalDateTime startTime,
-                                    @Param("end_time") LocalDateTime endTime);
+    @Query("SELECT a FROM Appointment a " +
+            "WHERE a.consultRoom.idConsultRoom = :consultRoomId " +
+            "  AND (a.startTime < :endTime AND a.endTime > :startTime)")
+    List<Appointment> findConsultRoomConflicts(@Param("consultRoomId") Long consultRoomId,
+                                               @Param("startTime") LocalDateTime startTime,
+                                               @Param("endTime")   LocalDateTime endTime);
 
+    @Query("SELECT a FROM Appointment a " +
+            "WHERE a.doctor.idDoctor = :doctorId " +
+            "  AND (a.startTime < :endTime AND a.endTime > :startTime)")
+    List<Appointment> findDoctorConflicts(@Param("doctorId") Long doctorId,
+                                          @Param("startTime") LocalDateTime startTime,
+                                          @Param("endTime")   LocalDateTime endTime);
+
+
+//    @Query("SELECT a FROM Appointment a WHERE a.consultRoom.idConsultRoom = :consult_room_id AND (a.startTime < :end_time AND a.endTime > :start_time)")
+//    List<Appointment> findConflicts(@Param("id_consult_room") Long idConsultRoom,
+//                                    @Param("start_time") LocalDateTime startTime,
+//                                    @Param("end_time") LocalDateTime endTime);
+//
 
 }
