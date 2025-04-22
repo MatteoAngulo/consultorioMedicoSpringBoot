@@ -1,0 +1,68 @@
+package edu.unimagdalena.consultoriomedico.services.impl;
+
+import edu.unimagdalena.consultoriomedico.DTO.request.DoctorDtoRequest;
+import edu.unimagdalena.consultoriomedico.DTO.response.DoctorDtoResponse;
+import edu.unimagdalena.consultoriomedico.entities.Doctor;
+import edu.unimagdalena.consultoriomedico.exceptions.notFound.DoctorNotFoundException;
+import edu.unimagdalena.consultoriomedico.mappers.DoctorMapper;
+import edu.unimagdalena.consultoriomedico.repositories.DoctorRepository;
+import edu.unimagdalena.consultoriomedico.services.DoctorService;
+
+import java.util.List;
+
+public class DoctorServiceImpl implements DoctorService {
+
+    private final DoctorRepository doctorRepository;
+    private final DoctorMapper doctorMapper;
+
+    public DoctorServiceImpl(DoctorRepository doctorRepository, DoctorMapper doctorMapper) {
+        this.doctorRepository = doctorRepository;
+        this.doctorMapper = doctorMapper;
+    }
+
+    @Override
+    public List<DoctorDtoResponse> findAllDoctors() {
+        return doctorRepository.findAll().stream()
+                .map(doctorMapper::toDoctorDtoResponse)
+                .toList();
+    }
+
+    @Override
+    public DoctorDtoResponse findDoctorById(Long idDoctor) {
+        Doctor doctor = doctorRepository.findById(idDoctor)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor with ID: " + idDoctor + " not found"));
+
+        return doctorMapper.toDoctorDtoResponse(doctor);
+    }
+
+    @Override
+    public DoctorDtoResponse saveDoctor(DoctorDtoRequest doctorDtoRequest) {
+        Doctor doctor = doctorMapper.toEntity(doctorDtoRequest);
+        return doctorMapper.toDoctorDtoResponse(doctorRepository.save(doctor));
+    }
+
+    @Override
+    public DoctorDtoResponse updateDoctor(Long idDoctor, DoctorDtoRequest doctorDtoRequest) {
+        Doctor doctor = doctorRepository.findById(idDoctor)
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor with ID: " + idDoctor + " not found"));
+
+        doctor.setFullName(doctorDtoRequest.fullName());
+        doctor.setEmail(doctorDtoRequest.email());
+        doctor.setSpeciality(doctorDtoRequest.speciality());
+        doctor.setAvailableFrom(doctorDtoRequest.availabreFrom());
+        doctor.setAvailableTo(doctorDtoRequest.availableTo());
+
+        return doctorMapper.toDoctorDtoResponse(doctorRepository.save(doctor));
+    }
+
+    @Override
+    public void deleteDoctor(Long idDoctor) {
+
+        if(!doctorRepository.existsById(idDoctor)){
+            throw new DoctorNotFoundException("Doctor with ID: " + idDoctor + " not found");
+        }
+
+        doctorRepository.deleteById(idDoctor);
+
+    }
+}

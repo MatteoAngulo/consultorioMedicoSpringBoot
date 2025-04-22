@@ -11,7 +11,7 @@ public interface MedicalRecordMapper {
 
     @Mapping(source = "patient.idPatient", target = "idPatient")
     @Mapping(source = "appointment.idAppointment", target = "idAppointment")
-    MedicalRecordDtoResponse toDto(MedicalRecord medicalRecord);
+    MedicalRecordDtoResponse toMedicalRecordDtoResponse(MedicalRecord medicalRecord);
 
     //No mappeamos
     @Mapping(target = "patient", ignore = true)

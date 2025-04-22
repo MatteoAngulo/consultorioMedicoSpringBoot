@@ -11,7 +11,7 @@ public interface AppointmentMapper {
     @Mapping(source = "patient.idPatient", target = "idPatient")
     @Mapping(source = "doctor.idDoctor", target = "idDoctor")
     @Mapping(source = "consultRoom.idConsultRoom", target = "idConsultRoom")
-    AppointmentDtoResponse toDto(Appointment appointment);
+    AppointmentDtoResponse toAppointmentDtoResponse(Appointment appointment);
 
     @Mapping(target = "patient", ignore = true)
     @Mapping(target = "doctor", ignore = true)

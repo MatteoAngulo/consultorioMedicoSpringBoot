@@ -9,6 +9,6 @@ import org.mapstruct.Mapper;
 public interface PatientMapper {
 
 
-    PatientDtoResponse toDto(Patient patient);
+    PatientDtoResponse toPatientDtoResponse(Patient patient);
     Patient toEntity(PatientDtoRequest patient);
 }

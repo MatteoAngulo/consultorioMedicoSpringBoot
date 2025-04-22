@@ -8,6 +8,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ConsultRoomMapper {
 
-    ConsultRoomDtoResponse toDto(ConsultRoom consultRoom);
+    ConsultRoomDtoResponse toConsultRoomDtoResponse(ConsultRoom consultRoom);
     ConsultRoom toEntity(ConsultRoomDtoRequest consultRoomDto);
 }

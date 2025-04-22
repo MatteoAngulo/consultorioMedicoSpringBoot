@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface DoctorMapper {
 
-    DoctorDtoResponse toDto(Doctor doctor);
+    DoctorDtoResponse toDoctorDtoResponse(Doctor doctor);
     Doctor toEntity(DoctorDtoRequest doctorDto);
 
 }
