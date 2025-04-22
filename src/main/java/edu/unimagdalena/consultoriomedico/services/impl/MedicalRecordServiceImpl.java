@@ -6,7 +6,6 @@ import edu.unimagdalena.consultoriomedico.entities.Appointment;
 import edu.unimagdalena.consultoriomedico.entities.MedicalRecord;
 import edu.unimagdalena.consultoriomedico.entities.Patient;
 import edu.unimagdalena.consultoriomedico.exceptions.AppointmentStillScheduledException;
-import edu.unimagdalena.consultoriomedico.exceptions.NoMedicalRecordFoundException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.AppointmentNotFoundException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.MedicalRecordNotFoundException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.PatientNotFoundException;
@@ -59,10 +58,6 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
                 .map(medicalRecordMapper::toMedicalRecordDtoResponse)
                 .toList();
 
-        if(result.isEmpty()){
-            throw new NoMedicalRecordFoundException("The patient with ID: " + id  + " has no medical records");
-        }
-
         return result;
     }
 
@@ -76,7 +71,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment with ID: " + medicalRecordDtoRequest.idAppointment() + " Not Found"));
 
         if(appointment.getStatus().equals("SCHEDULED")){
-            throw new AppointmentStillScheduledException("Appointment status is Scheduled");
+            throw new AppointmentStillScheduledException("Appointment's status is Scheduled");
         }
 
         MedicalRecord medicalRecord = medicalRecordMapper.toEntity(medicalRecordDtoRequest);

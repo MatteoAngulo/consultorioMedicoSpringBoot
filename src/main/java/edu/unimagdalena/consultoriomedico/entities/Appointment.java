@@ -1,5 +1,6 @@
 package edu.unimagdalena.consultoriomedico.entities;
 
+import edu.unimagdalena.consultoriomedico.enumaration.AppointmentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
@@ -46,7 +47,7 @@ public class Appointment {
     private LocalDateTime endTime;
 
     @Column
-    @NotNull
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
 
 }
