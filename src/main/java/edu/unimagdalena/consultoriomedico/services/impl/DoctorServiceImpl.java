@@ -7,9 +7,11 @@ import edu.unimagdalena.consultoriomedico.exceptions.notFound.DoctorNotFoundExce
 import edu.unimagdalena.consultoriomedico.mappers.DoctorMapper;
 import edu.unimagdalena.consultoriomedico.repositories.DoctorRepository;
 import edu.unimagdalena.consultoriomedico.services.DoctorService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;

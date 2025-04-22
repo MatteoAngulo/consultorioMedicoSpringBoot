@@ -7,9 +7,11 @@ import edu.unimagdalena.consultoriomedico.exceptions.notFound.PatientNotFoundExc
 import edu.unimagdalena.consultoriomedico.mappers.PatientMapper;
 import edu.unimagdalena.consultoriomedico.repositories.PatientRepository;
 import edu.unimagdalena.consultoriomedico.services.PatientService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
@@ -35,7 +37,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDtoResponse addPatient(PatientDtoRequest patient) {
+    public PatientDtoResponse savePatient(PatientDtoRequest patient) {
         Patient patientMapped = patientMapper.toEntity(patient);
         return patientMapper.toPatientDtoResponse(patientRepository.save(patientMapped));
     }

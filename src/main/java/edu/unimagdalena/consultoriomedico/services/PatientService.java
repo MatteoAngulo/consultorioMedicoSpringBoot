@@ -9,7 +9,7 @@ public interface PatientService {
 
     List<PatientDtoResponse> findAllPatients();
     PatientDtoResponse findPatientById(Long idPatient);
-    PatientDtoResponse addPatient(PatientDtoRequest patient);
+    PatientDtoResponse savePatient(PatientDtoRequest patient);
     PatientDtoResponse updatePatient(Long idPatient, PatientDtoRequest patient);
     void deletePatient(Long idPatient);
 
