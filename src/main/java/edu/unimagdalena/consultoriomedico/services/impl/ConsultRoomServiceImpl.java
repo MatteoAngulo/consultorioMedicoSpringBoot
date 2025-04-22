@@ -41,7 +41,8 @@ public class ConsultRoomServiceImpl implements ConsultRoomService {
     }
 
     @Override
-    public ConsultRoomDtoResponse updateConsultRoom(Long id, ConsultRoomDtoRequest consultRoomDtoRequest) {
+    public ConsultRoomDtoResponse
+    updateConsultRoom(Long id, ConsultRoomDtoRequest consultRoomDtoRequest) {
         ConsultRoom consultRoom = consultRoomRepository.findById(id)
                 .orElseThrow(() -> new ConsultRoomNotFoundException("Consult Room with ID: " + id + " Not Found"));
 
