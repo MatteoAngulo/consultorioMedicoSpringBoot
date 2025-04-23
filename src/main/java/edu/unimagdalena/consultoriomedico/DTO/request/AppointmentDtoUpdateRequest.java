@@ -4,10 +4,7 @@ import edu.unimagdalena.consultoriomedico.enumaration.AppointmentStatus;
 
 import java.time.LocalDateTime;
 
-public record AppointmentDtoRequest(
-        Long idPatient,
-        Long idDoctor,
-        Long idConsultRoom,
+public record AppointmentDtoUpdateRequest(
         LocalDateTime startTime,
         LocalDateTime endTime,
         AppointmentStatus status

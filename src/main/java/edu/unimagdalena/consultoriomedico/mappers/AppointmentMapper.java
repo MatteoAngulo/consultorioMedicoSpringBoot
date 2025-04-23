@@ -1,10 +1,12 @@
 package edu.unimagdalena.consultoriomedico.mappers;
 
 import edu.unimagdalena.consultoriomedico.DTO.request.AppointmentDtoRequest;
+import edu.unimagdalena.consultoriomedico.DTO.request.AppointmentDtoUpdateRequest;
 import edu.unimagdalena.consultoriomedico.DTO.response.AppointmentDtoResponse;
 import edu.unimagdalena.consultoriomedico.entities.Appointment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface AppointmentMapper {
@@ -17,4 +19,7 @@ public interface AppointmentMapper {
     @Mapping(target = "doctor", ignore = true)
     @Mapping(target = "consultRoom", ignore = true)
     Appointment toEntity(AppointmentDtoRequest appointment);
+
+    void updateAppointmentFromDto(AppointmentDtoUpdateRequest dto, @MappingTarget Appointment appointment);
+
 }

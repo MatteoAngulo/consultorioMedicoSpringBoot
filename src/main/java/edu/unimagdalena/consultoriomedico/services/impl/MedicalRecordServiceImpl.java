@@ -5,6 +5,7 @@ import edu.unimagdalena.consultoriomedico.DTO.response.MedicalRecordDtoResponse;
 import edu.unimagdalena.consultoriomedico.entities.Appointment;
 import edu.unimagdalena.consultoriomedico.entities.MedicalRecord;
 import edu.unimagdalena.consultoriomedico.entities.Patient;
+import edu.unimagdalena.consultoriomedico.enumaration.AppointmentStatus;
 import edu.unimagdalena.consultoriomedico.exceptions.AppointmentStillScheduledException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.AppointmentNotFoundException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.MedicalRecordNotFoundException;
@@ -70,7 +71,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         Appointment appointment = appointmentRepository.findById(medicalRecordDtoRequest.idAppointment())
                 .orElseThrow(() -> new AppointmentNotFoundException("Appointment with ID: " + medicalRecordDtoRequest.idAppointment() + " Not Found"));
 
-        if(appointment.getStatus().equals("SCHEDULED")){
+        if(appointment.getStatus() == AppointmentStatus.SCHEDULED){
             throw new AppointmentStillScheduledException("Appointment's status is Scheduled");
         }
 
