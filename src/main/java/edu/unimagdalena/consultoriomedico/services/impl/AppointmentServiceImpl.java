@@ -55,9 +55,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public AppointmentDtoResponse saveAppointment(AppointmentDtoRequest appointmentDtoRequest) {
 
-        if (appointmentDtoRequest.startTime().isAfter(appointmentDtoRequest.endTime())) {
-            throw new InvalidTimeRangeException("Start time must be before end time");
-        }
+        validarRangoHorario(appointmentDtoRequest.startTime(), appointmentDtoRequest.endTime());
 
         Patient patient = patientRepository.findById(appointmentDtoRequest.idPatient())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with ID: " + appointmentDtoRequest.idPatient() + " not found"));
@@ -115,6 +113,8 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new AppointmentInThePastException("Cannot modify an appointment that has already occurred");
         }
 
+        validarRangoHorario(appointmentDtoRequest.startTime(), appointmentDtoRequest.endTime());
+
         appointmentMapper.updateAppointmentFromDto(appointmentDtoRequest, appointment);
 
         return appointmentMapper.toAppointmentDtoResponse(appointmentRepository.save(appointment));
@@ -129,5 +129,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
 
         appointmentRepository.deleteById(id);
+    }
+
+    private void validarRangoHorario(LocalDateTime inicio, LocalDateTime fin) {
+        if (inicio.isAfter(fin) || inicio.equals(fin)) {
+            throw new InvalidTimeRangeException("Start time must be before end time");
+        }
     }
 }
