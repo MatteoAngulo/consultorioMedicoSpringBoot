@@ -1,6 +1,7 @@
 package edu.unimagdalena.consultoriomedico.repositories;
 
 import edu.unimagdalena.consultoriomedico.entities.*;
+import edu.unimagdalena.consultoriomedico.enumaration.AppointmentStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -80,7 +81,7 @@ class MedicalRecordRepositoryTest {
                 .consultRoom(consultRoom)
                 .startTime(LocalDateTime.now().plusDays(1).withHour(10).withMinute(0))
                 .endTime(LocalDateTime.now().plusDays(1).withHour(10).withMinute(30))
-                .status("SCHEDULED")
+                .status(AppointmentStatus.SCHEDULED)
                 .build());
 
         MedicalRecord medicalRecord = MedicalRecord.builder()
@@ -142,7 +143,7 @@ class MedicalRecordRepositoryTest {
                         .consultRoom(consultRoom)
                         .startTime(LocalDateTime.now().plusDays(1).withHour(10).withMinute(0))
                         .endTime(LocalDateTime.now().plusDays(1).withHour(10).withMinute(30))
-                        .status("SCHEDULED")
+                        .status(AppointmentStatus.SCHEDULED)
                         .build());
 
         Appointment appointment1 = appointmentRepository.save(
@@ -152,7 +153,7 @@ class MedicalRecordRepositoryTest {
                         .consultRoom(consultRoom)
                         .startTime(LocalDateTime.now().plusDays(2).withHour(10).withMinute(0))
                         .endTime(LocalDateTime.now().plusDays(2).withHour(10).withMinute(30))
-                        .status("SCHEDULED")
+                        .status(AppointmentStatus.SCHEDULED)
                         .build());
 
         MedicalRecord medicalRecord = MedicalRecord.builder()
@@ -221,7 +222,7 @@ class MedicalRecordRepositoryTest {
                         .consultRoom(consultRoom)
                         .startTime(LocalDateTime.now().plusDays(1).withHour(10).withMinute(0))
                         .endTime(LocalDateTime.now().plusDays(1).withHour(10).withMinute(30))
-                        .status("SCHEDULED")
+                        .status(AppointmentStatus.SCHEDULED)
                         .build());
 
         Appointment appointment1 = appointmentRepository.save(
@@ -231,7 +232,7 @@ class MedicalRecordRepositoryTest {
                         .consultRoom(consultRoom)
                         .startTime(LocalDateTime.now().plusDays(2).withHour(10).withMinute(0))
                         .endTime(LocalDateTime.now().plusDays(2).withHour(10).withMinute(30))
-                        .status("SCHEDULED")
+                        .status(AppointmentStatus.SCHEDULED)
                         .build());
 
         MedicalRecord medicalRecord = MedicalRecord.builder()
@@ -296,7 +297,7 @@ class MedicalRecordRepositoryTest {
                         .consultRoom(consultRoom)
                         .startTime(LocalDateTime.now().plusDays(1).withHour(10).withMinute(0))
                         .endTime(LocalDateTime.now().plusDays(1).withHour(10).withMinute(30))
-                        .status("SCHEDULED")
+                        .status(AppointmentStatus.SCHEDULED)
                         .build());
 
         MedicalRecord medicalRecord = MedicalRecord.builder()

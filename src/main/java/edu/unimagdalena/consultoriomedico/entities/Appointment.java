@@ -35,7 +35,7 @@ public class Appointment {
     @JoinColumn(name = "id_consultRoom", referencedColumnName = "idConsultRoom")
     private ConsultRoom consultRoom;
 
-    @OneToOne(mappedBy = "appointment")
+    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
     private MedicalRecord medicalRecord;
 
     @Column(nullable = false)
@@ -49,5 +49,7 @@ public class Appointment {
     @Column
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
+
+
 
 }

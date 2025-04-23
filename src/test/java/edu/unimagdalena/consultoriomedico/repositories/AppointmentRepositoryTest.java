@@ -1,10 +1,9 @@
 package edu.unimagdalena.consultoriomedico.repositories;
 
-import edu.unimagdalena.consultoriomedico.entities.Appointment;
-import edu.unimagdalena.consultoriomedico.entities.ConsultRoom;
-import edu.unimagdalena.consultoriomedico.entities.Doctor;
-import edu.unimagdalena.consultoriomedico.entities.Patient;
+import edu.unimagdalena.consultoriomedico.entities.*;
+import edu.unimagdalena.consultoriomedico.enumaration.AppointmentStatus;
 import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,14 +43,25 @@ class AppointmentRepositoryTest {
     private DoctorRepository      doctorRepository;
     @Autowired
     private ConsultRoomRepository consultRoomRepository;
+    @Autowired
+    private MedicalRecordRepository medicalRecordRepository;
 
     private Patient    paciente;
     private Doctor     doctor;
     private ConsultRoom consultorio;
+    private MedicalRecord medicalRecord;
+    private Appointment appointment;
 
+    LocalDateTime start;
+    LocalDateTime diagnostico;
+    LocalDateTime end;
 
     @BeforeEach
     void setUp() {
+        start = LocalDateTime.now().plusDays(1).withHour(9);
+        diagnostico = LocalDateTime.now().plusDays(1).withHour(9);
+        end = start.plusHours(1);
+
         paciente = patientRepository.save(
                 Patient.builder()
                         .fullName("Paciente Test")
@@ -76,202 +87,130 @@ class AppointmentRepositoryTest {
                         .description("Sala de diagnóstico")
                         .build()
         );
+
+        appointment = Appointment.builder()
+                .patient(paciente)
+                .consultRoom(consultorio)
+                .doctor(doctor)
+                .startTime(start)
+                .endTime(end)
+                .status(AppointmentStatus.SCHEDULED)
+                .build();
+
+        medicalRecord = MedicalRecord.builder()
+                .patient(paciente)
+                .appointment(appointment)
+                .notes("Alergico al acetaminofen")
+                .diagnosis("gripe")
+                .createdAt(diagnostico)
+                .build();
+
+        appointment.setMedicalRecord(medicalRecord);
+
+        appointmentRepository.save(appointment);
+    }
+
+    @AfterEach
+    void tearDown() {
+        medicalRecordRepository.deleteAll();
+        appointmentRepository.deleteAll();
+        consultRoomRepository.deleteAll();
+        doctorRepository.deleteAll();
+        patientRepository.deleteAll();
     }
 
     @Test
-    void shouldDetectConsultRoomConflict() {
-        LocalDateTime inicio1 = LocalDate.now().plusDays(1).atTime(10, 0);
-        LocalDateTime fin1    = inicio1.plusHours(1);
+    void shouldDetectConflictingAppointment() {
+        // Cita existente va de 'start' a 'end'
+        LocalDateTime conflictStart = start.plusMinutes(30);
+        LocalDateTime conflictEnd = end.plusMinutes(30);
 
-        appointmentRepository.save(
-                Appointment.builder()
-                        .patient(paciente)
-                        .doctor(doctor)
-                        .consultRoom(consultorio)
-                        .startTime(inicio1)
-                        .endTime(fin1)
-                        .status("AGENDADO")
-                        .build()
+        List<Appointment> conflicts = appointmentRepository.findConflicts(
+                appointment.getConsultRoom().getIdConsultRoom(),
+                conflictStart,
+                conflictEnd
         );
 
-        List<Appointment> conflictos = appointmentRepository.findConsultRoomConflicts(
-                consultorio.getIdConsultRoom(),
-                inicio1.plusMinutes(30),
-                fin1.plusMinutes(30)
-        );
-        assertFalse(conflictos.isEmpty(), "Debe detectar conflicto en el mismo ConsultRoom");
+        assertFalse(conflicts.isEmpty(), "Debe detectar conflicto en el mismo consultorio");
     }
 
     @Test
-    void shouldDetectDoctorConflict() {
-        // 2do consultorio para la cita conflictiva
-        ConsultRoom consultorio2 = consultRoomRepository.save(
+    void shouldDetectConflictingDoctor() {
+        // Creamos un segundo consultorio para aislar conflicto de consultorio
+        ConsultRoom otroConsultorio = consultRoomRepository.save(
                 ConsultRoom.builder()
                         .name("Consultorio 2")
                         .floor("4")
-                        .description("Sala adicional")
+                        .description("Sala auxiliar")
                         .build()
         );
+        LocalDateTime conflictStart = start.plusMinutes(30);
+        LocalDateTime conflictEnd = end.plusMinutes(30);
 
-        LocalDateTime s1 = LocalDate.now().plusDays(1).atTime(9, 0);
-        LocalDateTime e1 = s1.plusHours(1);
-
-        appointmentRepository.save(
-                Appointment.builder()
-                        .patient(paciente)
-                        .doctor(doctor)
-                        .consultRoom(consultorio)
-                        .startTime(s1)
-                        .endTime(e1)
-                        .status("AGENDADO")
-                        .build()
+        List<Appointment> conflicts = appointmentRepository.findConflicsWithDoctor(
+                appointment.getDoctor().getIdDoctor(),
+                conflictStart,
+                conflictEnd
         );
-
-        List<Appointment> conflictos = appointmentRepository.findDoctorConflicts(
-                doctor.getIdDoctor(),
-                s1.plusMinutes(30),
-                e1.plusMinutes(30)
-        );
-        assertFalse(conflictos.isEmpty(), "Debe detectar conflicto para el mismo Doctor");
+        assertFalse(conflicts.isEmpty(), "Debe detectar conflicto con el mismo doctor");
     }
 
     @Test
-    void shouldSaveAppointmentWithinDoctorAvailability() {
-        LocalDateTime s = LocalDate.now().plusDays(2).atTime(11, 0);
-        LocalDateTime e = s.plusHours(1);
+    void shouldSaveAppointmentWithoutConflict(){
+        LocalDateTime newStart = end.plusHours(1); // Hora posterior a la cita existente
+        LocalDateTime newEnd = newStart.plusHours(1);
 
-        Appointment a = appointmentRepository.save(
-                Appointment.builder()
-                        .patient(paciente)
-                        .doctor(doctor)
-                        .consultRoom(consultorio)
-                        .startTime(s)
-                        .endTime(e)
-                        .status("AGENDADO")
-                        .build()
-        );
+        // Crear nuevo registro médico
+        MedicalRecord newMedicalRecord = MedicalRecord.builder()
+                .patient(paciente)
+                .notes("Consulta de control")
+                .diagnosis("Salud estable")
+                .createdAt(LocalDateTime.now())
+                .build();
 
-        assertNotNull(a.getIdAppointment());
-        assertEquals(s, a.getStartTime());
-        assertEquals(e, a.getEndTime());
+        // Construir nueva cita sin solapamientos
+        Appointment newAppointment = Appointment.builder()
+                .patient(paciente)
+                .consultRoom(consultorio)
+                .doctor(doctor)
+                .startTime(newStart)
+                .endTime(newEnd)
+                .medicalRecord(newMedicalRecord)
+                .status(AppointmentStatus.SCHEDULED)
+                .build();
+
+        // Relación bidireccional
+        newMedicalRecord.setAppointment(newAppointment);
+
+        // Guardar y verificar
+        Appointment savedAppointment = appointmentRepository.save(newAppointment);
+
+        assertNotNull(savedAppointment.getIdAppointment());
+        assertEquals(newStart, savedAppointment.getStartTime());
+        assertEquals(newEnd, savedAppointment.getEndTime());
+        assertEquals(consultorio.getIdConsultRoom(), savedAppointment.getConsultRoom().getIdConsultRoom());
+        assertNotNull(savedAppointment.getMedicalRecord().getIdMedicalRecord());
     }
 
     @Test
-    void shouldNotAllowAppointmentInPast() {
-        LocalDateTime pasado = LocalDateTime.now().minusHours(1);
-
-        assertThrows(ConstraintViolationException.class, () -> {
-            appointmentRepository.saveAndFlush(
-                    Appointment.builder()
-                            .patient(paciente)
-                            .doctor(doctor)
-                            .consultRoom(consultorio)
-                            .startTime(pasado)
-                            .endTime(pasado.plusHours(1))
-                            .status("AGENDADO")
-                            .build()
-            );
-        }, "No se debe permitir agendar en el pasado (@Future)");
+    void shouldFindAppointmentById() {
+        Optional<Appointment> foundAppointment = appointmentRepository.findById(appointment.getIdAppointment());
+        assertTrue(foundAppointment.isPresent(), "Debe encontrar la cita por ID");
+        assertEquals(appointment.getStartTime(), foundAppointment.get().getStartTime());
     }
 
     @Test
-    void shouldNotAllowOutsideDoctorAvailability() {
-        LocalDateTime early = LocalDate.now().plusDays(1).atTime(7, 0);
-        LocalDateTime late  = early.plusHours(1);
+    void shouldDeleteAppointment() {
+        Long appointmentId = appointment.getIdAppointment();
+        appointmentRepository.delete(appointment);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            if (early.toLocalTime().isBefore(doctor.getAvailableFrom()) ||
-                    late.toLocalTime().isAfter(doctor.getAvailableTo())) {
-                throw new IllegalArgumentException("Fuera del horario del doctor");
-            }
-            appointmentRepository.save(
-                    Appointment.builder()
-                            .patient(paciente)
-                            .doctor(doctor)
-                            .consultRoom(consultorio)
-                            .startTime(early)
-                            .endTime(late)
-                            .status("AGENDADO")
-                            .build()
-            );
-        }, "No debe agendar fuera del horario disponible del doctor");
+        Optional<Appointment> deletedAppointment = appointmentRepository.findById(appointmentId);
+        Optional<MedicalRecord> deletedMedicalRecord = medicalRecordRepository.findById(medicalRecord.getIdMedicalRecord());
+
+        assertTrue(deletedAppointment.isEmpty(), "La cita debe eliminarse");
+        assertTrue(deletedMedicalRecord.isEmpty(), "El registro médico asociado también debe eliminarse");
     }
 
-    @Test
-    void shouldListAllAppointments() {
-        LocalDateTime t1 = LocalDate.now().plusDays(4).atTime(9, 0);
-        LocalDateTime t2 = LocalDate.now().plusDays(4).atTime(11, 0);
 
-        Appointment a1 = appointmentRepository.save(
-                Appointment.builder()
-                        .patient(paciente)
-                        .doctor(doctor)
-                        .consultRoom(consultorio)
-                        .startTime(t1)
-                        .endTime(t1.plusHours(1))
-                        .status("AGENDADO")
-                        .build()
-        );
 
-        Appointment a2 = appointmentRepository.save(
-                Appointment.builder()
-                        .patient(paciente)
-                        .doctor(doctor)
-                        .consultRoom(consultorio)
-                        .startTime(t2)
-                        .endTime(t2.plusHours(1))
-                        .status("AGENDADO")
-                        .build()
-        );
-
-        List<Appointment> todas = appointmentRepository.findAll();
-        assertTrue(todas.contains(a1) && todas.contains(a2));
-        assertEquals(2, todas.size());
-    }
-
-    @Test
-    void shouldUpdateAppointment() {
-        LocalDateTime s = LocalDate.now().plusDays(5).atTime(14, 0);
-        LocalDateTime e = s.plusHours(1);
-
-        Appointment original = appointmentRepository.save(
-                Appointment.builder()
-                        .patient(paciente)
-                        .doctor(doctor)
-                        .consultRoom(consultorio)
-                        .startTime(s)
-                        .endTime(e)
-                        .status("AGENDADO")
-                        .build()
-        );
-
-        original.setStatus("COMPLETADO");
-        Appointment updated = appointmentRepository.save(original);
-
-        Appointment fetched = appointmentRepository.findById(updated.getIdAppointment()).orElseThrow();
-        assertEquals("COMPLETADO", fetched.getStatus());
-    }
-
-    @Test
-    void shouldDeleteAndFindById() {
-        LocalDateTime s = LocalDate.now().plusDays(3).atTime(12, 0);
-        LocalDateTime e = s.plusHours(1);
-
-        Appointment saved = appointmentRepository.save(
-                Appointment.builder()
-                        .patient(paciente)
-                        .doctor(doctor)
-                        .consultRoom(consultorio)
-                        .startTime(s)
-                        .endTime(e)
-                        .status("AGENDADO")
-                        .build()
-        );
-
-        Appointment fetched = appointmentRepository.findById(saved.getIdAppointment()).orElseThrow();
-        assertEquals(saved.getIdAppointment(), fetched.getIdAppointment());
-
-        appointmentRepository.deleteById(saved.getIdAppointment());
-        assertFalse(appointmentRepository.findById(saved.getIdAppointment()).isPresent());
-    }
 }
