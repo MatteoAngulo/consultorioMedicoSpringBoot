@@ -51,7 +51,7 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setFullName(doctorDtoRequest.fullName());
         doctor.setEmail(doctorDtoRequest.email());
         doctor.setSpeciality(doctorDtoRequest.speciality());
-        doctor.setAvailableFrom(doctorDtoRequest.availabreFrom());
+        doctor.setAvailableFrom(doctorDtoRequest.availableFrom());
         doctor.setAvailableTo(doctorDtoRequest.availableTo());
 
         return doctorMapper.toDoctorDtoResponse(doctorRepository.save(doctor));

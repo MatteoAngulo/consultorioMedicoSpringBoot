@@ -5,6 +5,7 @@ import edu.unimagdalena.consultoriomedico.DTO.response.MedicalRecordDtoResponse;
 import edu.unimagdalena.consultoriomedico.entities.MedicalRecord;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface MedicalRecordMapper {
@@ -17,4 +18,5 @@ public interface MedicalRecordMapper {
     @Mapping(target = "patient", ignore = true)
     @Mapping(target = "appointment", ignore = true)
     MedicalRecord toEntity(MedicalRecordDtoRequest medicalRecord);
+
 }
