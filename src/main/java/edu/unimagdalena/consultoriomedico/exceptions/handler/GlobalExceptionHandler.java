@@ -109,6 +109,17 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(AppointmentCanceledException.class)
+    public ResponseEntity<ApiError> handlerAppointmentCanceledException(AppointmentCanceledException ex){
+        ApiError apiError = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .errors(null)
+                .build();
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(ConsultRoomAlreadyBookedException.class)
     public ResponseEntity<ApiError> handlerConsultRoomAlreadyBooked(ConsultRoomAlreadyBookedException ex){
         ApiError apiError = ApiError.builder()

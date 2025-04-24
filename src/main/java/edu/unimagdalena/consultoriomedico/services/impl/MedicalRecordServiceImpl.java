@@ -6,6 +6,7 @@ import edu.unimagdalena.consultoriomedico.entities.Appointment;
 import edu.unimagdalena.consultoriomedico.entities.MedicalRecord;
 import edu.unimagdalena.consultoriomedico.entities.Patient;
 import edu.unimagdalena.consultoriomedico.enumaration.AppointmentStatus;
+import edu.unimagdalena.consultoriomedico.exceptions.AppointmentCanceledException;
 import edu.unimagdalena.consultoriomedico.exceptions.AppointmentStillScheduledException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.AppointmentNotFoundException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.MedicalRecordNotFoundException;
@@ -73,6 +74,10 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
         if(appointment.getStatus() == AppointmentStatus.SCHEDULED){
             throw new AppointmentStillScheduledException("Appointment's status is Scheduled");
+        }
+
+        if(appointment.getStatus() == AppointmentStatus.CANCELED){
+            throw new AppointmentCanceledException("Appointment has been canceled");
         }
 
         MedicalRecord medicalRecord = medicalRecordMapper.toEntity(medicalRecordDtoRequest);
