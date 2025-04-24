@@ -79,7 +79,8 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         medicalRecord.setPatient(patient);
         medicalRecord.setAppointment(appointment);
 
-        return medicalRecordMapper.toMedicalRecordDtoResponse(medicalRecord);
+        MedicalRecord savedEntity = medicalRecordRepository.save(medicalRecord);
+        return medicalRecordMapper.toMedicalRecordDtoResponse(savedEntity);
 
     }
 
@@ -90,7 +91,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             throw new MedicalRecordNotFoundException("Medical Record with ID: " + id + " Not Found");
         }
 
-        consultRoomRepository.deleteById(id);
+        medicalRecordRepository.deleteById(id);
 
     }
 }
