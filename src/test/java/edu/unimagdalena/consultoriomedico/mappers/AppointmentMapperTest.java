@@ -27,7 +27,7 @@ class AppointmentMapperTest {
 
     @Test
     void testToAppointmentDtoResponse() {
-        // Arrange
+
         Patient patient = Patient.builder()
                 .idPatient(5L)
                 .build();
@@ -55,10 +55,8 @@ class AppointmentMapperTest {
                 .status(AppointmentStatus.SCHEDULED)
                 .build();
 
-        // Act
         AppointmentDtoResponse dto = mapper.toAppointmentDtoResponse(appointment);
 
-        // Assert
         assertThat(dto.idAppointment()).isEqualTo(10L);
         assertThat(dto.idPatient()).isEqualTo(5L);
         assertThat(dto.idDoctor()).isEqualTo(6L);
@@ -70,17 +68,14 @@ class AppointmentMapperTest {
 
     @Test
     void testToEntity() {
-        // Arrange
         LocalDateTime start = LocalDateTime.now().plusDays(2).plusHours(9);
         LocalDateTime end   = LocalDateTime.of(2025, 6, 1, 15, 0);
         AppointmentDtoRequest dtoRequest = new AppointmentDtoRequest(
                 5L, 6L, 7L, start, end, AppointmentStatus.COMPLETED
         );
 
-        // Act
         Appointment entity = mapper.toEntity(dtoRequest);
 
-        // Assert
         assertThat(entity.getIdAppointment()).isNull();
         assertThat(entity.getPatient()).isNull();
         assertThat(entity.getDoctor()).isNull();
@@ -92,7 +87,6 @@ class AppointmentMapperTest {
 
     @Test
     void testUpdateAppointmentFromDto() {
-        // Arrange
         LocalDateTime originalStart = LocalDateTime.now().plusDays(3).plusHours(9);
         LocalDateTime originalEnd   = originalStart.plusHours(1);
         Appointment appointment = Appointment.builder()
@@ -108,10 +102,8 @@ class AppointmentMapperTest {
                 newStart, newEnd, AppointmentStatus.CANCELED
         );
 
-        // Act
         mapper.updateAppointmentFromDto(updateDto, appointment);
 
-        // Assert
         assertThat(appointment.getStartTime()).isEqualTo(newStart);
         assertThat(appointment.getEndTime()).isEqualTo(newEnd);
         assertThat(appointment.getStatus()).isEqualTo(AppointmentStatus.CANCELED);

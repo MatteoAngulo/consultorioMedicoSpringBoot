@@ -22,7 +22,7 @@ import java.util.List;
 public class Doctor {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idDoctor;
+    private Long idDoctor;
 
     @OneToMany(mappedBy = "doctor")
     private List<Appointment> appointment;
