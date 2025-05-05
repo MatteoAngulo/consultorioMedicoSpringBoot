@@ -1,4 +1,4 @@
-package edu.unimagdalena.consultoriomedico.services;
+package edu.unimagdalena.consultoriomedico.security.service;
 
 import edu.unimagdalena.consultoriomedico.entities.UserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
