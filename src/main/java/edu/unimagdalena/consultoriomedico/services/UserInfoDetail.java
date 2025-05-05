@@ -1,13 +1,12 @@
 package edu.unimagdalena.consultoriomedico.services;
 
 import edu.unimagdalena.consultoriomedico.entities.UserEntity;
-import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.security.core.GrantedAuthority;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.GrantedAuthority;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,9 +16,9 @@ public class UserInfoDetail implements UserDetails{
     private final String username;
     private final String password;
     private final String email;
-    private final Set<> authorities;
+    private final Set<GrantedAuthority> authorities;
     public UserInfoDetail(UserEntity user){
-        this.id = us;
+        this.id = user.getIdUser();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.email = user.getEmail();
