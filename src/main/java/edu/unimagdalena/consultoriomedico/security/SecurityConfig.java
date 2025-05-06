@@ -57,10 +57,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
 
                         //Endpoints con requisitos
-                        .requestMatchers("/api/patients/**").hasRole("ADMIN")
-                        .requestMatchers("/api/doctors/**").hasRole("ADMIN")
-                        .requestMatchers("/api/appointments/**").hasRole("ADMIN")
-                        
+                        .requestMatchers("/api/patients/**").hasRole("PATIENT")
+                        .requestMatchers("/api/doctors/**").hasRole("DOCTOR")
+                        .requestMatchers("/api/**").hasRole("ADMIN")
+
 
                         //Cualquier otro no especificado
                         .anyRequest().authenticated()
