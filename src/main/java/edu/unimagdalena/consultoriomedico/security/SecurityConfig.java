@@ -54,12 +54,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         //Endpoints públicos
-                        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
 
                         //Endpoints con requisitos
-                        .requestMatchers("/api/patients/**").hasRole("PATIENT")
-                        .requestMatchers("/api/doctors/**").hasRole("DOCTOR")
-                        .requestMatchers("/api/**").hasRole("ADMIN")
+//                        .requestMatchers("/api/v1/patients/**").hasRole("PATIENT")
+//                        .requestMatchers("/api/v1/doctors/**").hasRole("DOCTOR")
+//                        .requestMatchers("/api/v1/**").hasRole("ADMIN")
 
 
                         //Cualquier otro no especificado

@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping ("/auth")
+@RequestMapping("/api/v1/auth")
 public class UserController {
     private final JpaUserDetailService service;
     private final JwtUtil jwtService;
