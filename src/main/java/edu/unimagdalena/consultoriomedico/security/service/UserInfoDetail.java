@@ -62,4 +62,3 @@ public class UserInfoDetail implements UserDetails{
         return true;
     }
 }
-

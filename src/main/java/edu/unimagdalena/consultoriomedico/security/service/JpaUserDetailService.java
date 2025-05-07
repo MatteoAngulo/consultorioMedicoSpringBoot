@@ -1,5 +1,6 @@
 package edu.unimagdalena.consultoriomedico.security.service;
 
+import edu.unimagdalena.consultoriomedico.DTO.UserDtoRequest;
 import edu.unimagdalena.consultoriomedico.entities.UserEntity;
 import edu.unimagdalena.consultoriomedico.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -21,4 +22,13 @@ public class JpaUserDetailService implements UserDetailsService {
                 .orElseThrow(()-> new UsernameNotFoundException("User not found"));
         return new UserInfoDetail(user);
     }
+
+    public UserDtoRequest addUser(UserDtoRequest userInfo) {
+        UserEntity user = new UserEntity(null, userInfo.username(), passwordEncoder.encode(userInfo.password()), userInfo.email(),userInfo.roles());
+        user = userRepository.save(user);
+        return new UserDtoRequest(user.getUsername(),user.getEmail(), userInfo.password(), user.getRoles());
+    }
+
+
+
 }
