@@ -4,6 +4,7 @@ import edu.unimagdalena.consultoriomedico.DTO.AuthRequest;
 import edu.unimagdalena.consultoriomedico.DTO.UserDtoRequest;
 import edu.unimagdalena.consultoriomedico.security.jwt.JwtUtil;
 import edu.unimagdalena.consultoriomedico.security.service.JpaUserDetailService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +20,7 @@ public class UserController {
     private final JwtUtil jwtService;
     private final AuthenticationManager authenticationManager;
 
-    UserController(JpaUserDetailService service, JwtUtil jwtService, AuthenticationManager authenticationManager) {
+    UserController(@Qualifier("jpaUserDetailService") JpaUserDetailService service, JwtUtil jwtService, AuthenticationManager authenticationManager) {
         this.service = service;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
