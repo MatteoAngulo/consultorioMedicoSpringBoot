@@ -34,7 +34,7 @@ class PatientControllerTest {
         PatientDtoResponse response = new PatientDtoResponse(1L, "Carlos Pérez", "carlos@test.com", "3001234567");
         when(patientService.findAllPatients()).thenReturn(List.of(response));
 
-        ResponseEntity<List<PatientDtoResponse>> result = patientController.getAllRooms();
+        ResponseEntity<List<PatientDtoResponse>> result = patientController.getAllPatients();
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(1, result.getBody().size());
