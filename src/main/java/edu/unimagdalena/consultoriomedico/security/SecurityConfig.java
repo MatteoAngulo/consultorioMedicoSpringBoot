@@ -1,5 +1,6 @@
 package edu.unimagdalena.consultoriomedico.security;
 
+import edu.unimagdalena.consultoriomedico.repositories.RoleRepository;
 import edu.unimagdalena.consultoriomedico.repositories.UserRepository;
 import edu.unimagdalena.consultoriomedico.security.jwt.JwtFilter;
 import edu.unimagdalena.consultoriomedico.security.service.JpaUserDetailService;
@@ -25,8 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository repository, PasswordEncoder passwordEncoder){
-        return new JpaUserDetailService(repository, passwordEncoder);
+    public UserDetailsService userDetailsService(UserRepository UserRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserRepository userRepository){
+        return new JpaUserDetailService(userRepository, passwordEncoder, roleRepository);
     }
 
     @Bean

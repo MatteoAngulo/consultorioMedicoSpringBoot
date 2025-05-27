@@ -2,6 +2,7 @@ package edu.unimagdalena.consultoriomedico.controllers;
 
 import edu.unimagdalena.consultoriomedico.DTO.AuthRequest;
 import edu.unimagdalena.consultoriomedico.DTO.UserDtoRequest;
+import edu.unimagdalena.consultoriomedico.DTO.UserDtoResponse;
 import edu.unimagdalena.consultoriomedico.security.jwt.JwtUtil;
 import edu.unimagdalena.consultoriomedico.security.service.JpaUserDetailService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,8 +28,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDtoRequest> addNewUser(@RequestBody UserDtoRequest userDto){
-        UserDtoRequest response = service.addUser(userDto);
+    public ResponseEntity<UserDtoResponse> addNewUser(@RequestBody UserDtoRequest userDto){
+        UserDtoResponse response = service.addUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

@@ -1,6 +1,8 @@
 package edu.unimagdalena.consultoriomedico.exceptions.handler;
 
 import edu.unimagdalena.consultoriomedico.exceptions.*;
+import edu.unimagdalena.consultoriomedico.exceptions.alreadyExists.EmailAlreadyExistsException;
+import edu.unimagdalena.consultoriomedico.exceptions.alreadyExists.UsernameAlreadyExistsException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.DoctorNotFoundException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -171,5 +173,30 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handlerUsernameAlreadyExists(UsernameAlreadyExistsException ex){
+        ApiError apiError = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .errors(null)
+                .build();
+
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
+
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handlerEmailAlreadyExists(EmailAlreadyExistsException ex){
+        ApiError apiError = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .message(ex.getMessage())
+                .errors(null)
+                .build();
+
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
+
+    }
 
 }
