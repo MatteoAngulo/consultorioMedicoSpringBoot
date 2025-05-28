@@ -94,6 +94,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setDoctor(doctor);
         appointment.setPatient(patient);
         appointment.setConsultRoom(consultRoom);
+        appointment.setStatus(AppointmentStatus.SCHEDULED);
 
         return appointmentMapper.toAppointmentDtoResponse(appointmentRepository.save(appointment));
     }
