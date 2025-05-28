@@ -30,11 +30,11 @@ import java.util.List;
 
 public class AppointmentServiceImpl implements AppointmentService {
 
-    private AppointmentRepository appointmentRepository;
-    private AppointmentMapper appointmentMapper;
-    private PatientRepository patientRepository;
-    private ConsultRoomRepository consultRoomRepository;
-    private DoctorRepository doctorRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final AppointmentMapper appointmentMapper;
+    private final PatientRepository patientRepository;
+    private final ConsultRoomRepository consultRoomRepository;
+    private final DoctorRepository doctorRepository;
 
 
     @Override

@@ -27,10 +27,10 @@ import java.util.List;
 public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     private final ConsultRoomRepository consultRoomRepository;
-    private MedicalRecordRepository medicalRecordRepository;
-    private PatientRepository patientRepository;
-    private AppointmentRepository appointmentRepository;
-    private MedicalRecordMapper medicalRecordMapper;
+    private final MedicalRecordRepository medicalRecordRepository;
+    private final PatientRepository patientRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final MedicalRecordMapper medicalRecordMapper;
 
 
     @Override
