@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -28,6 +29,6 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "idUser"),
             inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "idRole")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
 }
