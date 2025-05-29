@@ -7,12 +7,10 @@ import edu.unimagdalena.consultoriomedico.entities.MedicalRecord;
 import edu.unimagdalena.consultoriomedico.entities.Patient;
 import edu.unimagdalena.consultoriomedico.enumaration.AppointmentStatus;
 import edu.unimagdalena.consultoriomedico.exceptions.AppointmentStillScheduledException;
-import edu.unimagdalena.consultoriomedico.exceptions.notFound.AppointmentNotFoundException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.MedicalRecordNotFoundException;
 import edu.unimagdalena.consultoriomedico.exceptions.notFound.PatientNotFoundException;
 import edu.unimagdalena.consultoriomedico.mappers.MedicalRecordMapper;
 import edu.unimagdalena.consultoriomedico.repositories.AppointmentRepository;
-import edu.unimagdalena.consultoriomedico.repositories.ConsultRoomRepository;
 import edu.unimagdalena.consultoriomedico.repositories.MedicalRecordRepository;
 import edu.unimagdalena.consultoriomedico.repositories.PatientRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -42,8 +39,6 @@ class MedicalRecordServiceImplTest {
     @Mock
     private AppointmentRepository appointmentRepository;
     @Mock
-    private ConsultRoomRepository consultRoomRepository;
-    @Mock
     private MedicalRecordMapper medicalRecordMapper;
 
     @InjectMocks
@@ -57,13 +52,12 @@ class MedicalRecordServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         patient = Patient.builder().idPatient(1L).build();
         appointment = Appointment.builder()
                 .idAppointment(2L)
                 .status(AppointmentStatus.COMPLETED)
                 .build();
-        createdAt = LocalDateTime.of(2025,5,1,10,0);
+        createdAt = LocalDateTime.now();
         dtoRequest = new MedicalRecordDtoRequest(1L,2L,
                 "Dx","Notes",createdAt);
         dtoResponse = new MedicalRecordDtoResponse(
@@ -178,17 +172,17 @@ class MedicalRecordServiceImplTest {
                 .idMedicalRecord(5L)
                 .notes("notes")
                 .diagnosis("diagnosis")
-                .createdAt(LocalDateTime.of(2025, 6, 1, 10, 0))
+                .createdAt(LocalDateTime.now().plusDays(1L).plusHours(10L))
                 .build();
 
         when(medicalRecordRepository.existsById(medicalRecord.getIdMedicalRecord())).thenReturn(true);
-        doNothing().when(medicalRecordRepository).deleteById(medicalRecord.getIdMedicalRecord());
+        doNothing().when(medicalRecordRepository).deleteMedicalRecordById(medicalRecord.getIdMedicalRecord());
 
         // Ejecución del método
         service.deleteMedicalRecord(medicalRecord.getIdMedicalRecord());
 
         // Verificación
         verify(medicalRecordRepository).existsById(medicalRecord.getIdMedicalRecord());
-        verify(medicalRecordRepository).deleteById(medicalRecord.getIdMedicalRecord());
+        verify(medicalRecordRepository).deleteMedicalRecordById(medicalRecord.getIdMedicalRecord());
     }
 }

@@ -1,6 +1,5 @@
 package edu.unimagdalena.consultoriomedico.mappers;
 
-import edu.unimagdalena.consultoriomedico.mappers.AppointmentMapperImpl;
 import edu.unimagdalena.consultoriomedico.DTO.request.AppointmentDtoRequest;
 import edu.unimagdalena.consultoriomedico.DTO.request.AppointmentDtoUpdateRequest;
 import edu.unimagdalena.consultoriomedico.DTO.response.AppointmentDtoResponse;
@@ -69,20 +68,23 @@ class AppointmentMapperTest {
     @Test
     void testToEntity() {
         LocalDateTime start = LocalDateTime.now().plusDays(2).plusHours(9);
-        LocalDateTime end   = LocalDateTime.of(2025, 6, 1, 15, 0);
+        LocalDateTime end   = start.plusHours(2);
         AppointmentDtoRequest dtoRequest = new AppointmentDtoRequest(
                 5L, 6L, 7L, start, end
         );
 
         Appointment entity = mapper.toEntity(dtoRequest);
 
+        // Assert
+        assertThat(entity).isNotNull();
+        assertThat(entity.getStartTime()).isEqualTo(start);
+        assertThat(entity.getEndTime()).isEqualTo(end);
+        // Mapper ignores associations and id
         assertThat(entity.getIdAppointment()).isNull();
         assertThat(entity.getPatient()).isNull();
         assertThat(entity.getDoctor()).isNull();
         assertThat(entity.getConsultRoom()).isNull();
-        assertThat(entity.getStartTime()).isEqualTo(start);
-        assertThat(entity.getEndTime()).isEqualTo(end);
-        assertThat(entity.getStatus()).isEqualTo(AppointmentStatus.COMPLETED);
+        assertThat(entity.getStatus()).isNull();
     }
 
     @Test

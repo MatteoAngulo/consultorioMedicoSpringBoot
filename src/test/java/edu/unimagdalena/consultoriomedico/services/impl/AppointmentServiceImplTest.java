@@ -14,9 +14,10 @@ import edu.unimagdalena.consultoriomedico.mappers.AppointmentMapper;
 import edu.unimagdalena.consultoriomedico.repositories.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -27,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class AppointmentServiceImplTest {
 
     @Mock
@@ -51,7 +53,6 @@ class AppointmentServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         patient = Patient.builder().idPatient(1L).build();
         doctor = Doctor.builder()
                 .idDoctor(2L)
@@ -59,7 +60,9 @@ class AppointmentServiceImplTest {
                 .availableTo(LocalTime.of(17,0))
                 .build();
         consultRoom = ConsultRoom.builder().idConsultRoom(3L).build();
-        start = LocalDateTime.of(2025,5,1,9,0);
+
+        LocalDateTime now = LocalDateTime.now();
+        start = now.plusDays(1).withHour(9).withMinute(0).withSecond(0);
         end   = start.plusHours(1);
     }
 
