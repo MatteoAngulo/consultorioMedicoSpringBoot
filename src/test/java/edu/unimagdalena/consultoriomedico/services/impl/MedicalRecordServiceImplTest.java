@@ -166,17 +166,29 @@ class MedicalRecordServiceImplTest {
 
     @Test
     void deleteMedicalRecord_whenNotExists_throwsException() {
-        when(medicalRecordRepository.existsById(10L)).thenReturn(false);
+        lenient().when(medicalRecordRepository.existsById(10L)).thenReturn(false);
         assertThrows(MedicalRecordNotFoundException.class,
                 () -> service.deleteMedicalRecord(10L));
     }
 
     @Test
     void deleteMedicalRecord_whenExists_deletes() {
-        when(medicalRecordRepository.existsById(3L)).thenReturn(true);
 
-        service.deleteMedicalRecord(3L);
+        MedicalRecord medicalRecord = MedicalRecord.builder()
+                .idMedicalRecord(5L)
+                .notes("notes")
+                .diagnosis("diagnosis")
+                .createdAt(LocalDateTime.of(2025, 6, 1, 10, 0))
+                .build();
 
-        verify(medicalRecordRepository).deleteById(3L);
+        when(medicalRecordRepository.existsById(medicalRecord.getIdMedicalRecord())).thenReturn(true);
+        doNothing().when(medicalRecordRepository).deleteById(medicalRecord.getIdMedicalRecord());
+
+        // Ejecución del método
+        service.deleteMedicalRecord(medicalRecord.getIdMedicalRecord());
+
+        // Verificación
+        verify(medicalRecordRepository).existsById(medicalRecord.getIdMedicalRecord());
+        verify(medicalRecordRepository).deleteById(medicalRecord.getIdMedicalRecord());
     }
 }

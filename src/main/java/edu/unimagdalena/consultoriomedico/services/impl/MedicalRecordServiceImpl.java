@@ -96,7 +96,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
             throw new MedicalRecordNotFoundException("Medical Record with ID: " + id + " Not Found");
         }
 
-        medicalRecordRepository.deleteById(id);
+        medicalRecordRepository.deleteMedicalRecordById(id);
 
     }
 }
