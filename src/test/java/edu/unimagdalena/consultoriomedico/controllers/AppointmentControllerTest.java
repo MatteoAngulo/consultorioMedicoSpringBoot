@@ -64,7 +64,7 @@ class AppointmentControllerTest {
 
     @Test
     void createAppointment_returnsCreatedAndDto() {
-        AppointmentDtoRequest req = new AppointmentDtoRequest(2L,3L,4L, start, end, null);
+        AppointmentDtoRequest req = new AppointmentDtoRequest(2L,3L,4L, start, end);
         when(appointmentService.saveAppointment(any(AppointmentDtoRequest.class))).thenReturn(sampleDto);
 
         ResponseEntity<AppointmentDtoResponse> response = appointmentController.createAppointment(req);

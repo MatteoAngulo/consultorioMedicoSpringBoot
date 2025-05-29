@@ -97,7 +97,7 @@ class AppointmentServiceImplTest {
 
     @Test
     void saveAppointment_whenValid_returnsDto() {
-        AppointmentDtoRequest req = new AppointmentDtoRequest(1L,2L,3L,start,end,AppointmentStatus.SCHEDULED);
+        AppointmentDtoRequest req = new AppointmentDtoRequest(1L,2L,3L,start,end);
         when(patientRepository.findById(1L)).thenReturn(Optional.of(patient));
         when(doctorRepository.findById(2L)).thenReturn(Optional.of(doctor));
         when(consultRoomRepository.findById(3L)).thenReturn(Optional.of(consultRoom));
@@ -118,13 +118,13 @@ class AppointmentServiceImplTest {
     @Test
     void saveAppointment_whenInvalidTime_throwsInvalidTimeRange() {
         LocalDateTime badStart = start.plusHours(2);
-        AppointmentDtoRequest req = new AppointmentDtoRequest(1L,2L,3L,badStart,start,AppointmentStatus.SCHEDULED);
+        AppointmentDtoRequest req = new AppointmentDtoRequest(1L,2L,3L,badStart,start);
         assertThrows(InvalidTimeRangeException.class, () -> service.saveAppointment(req));
     }
 
     @Test
     void saveAppointment_whenPatientNotFound_throwsPatientNotFound() {
-        AppointmentDtoRequest req = new AppointmentDtoRequest(1L,2L,3L,start,end,AppointmentStatus.SCHEDULED);
+        AppointmentDtoRequest req = new AppointmentDtoRequest(1L,2L,3L,start,end);
         when(patientRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(PatientNotFoundException.class, () -> service.saveAppointment(req));
     }

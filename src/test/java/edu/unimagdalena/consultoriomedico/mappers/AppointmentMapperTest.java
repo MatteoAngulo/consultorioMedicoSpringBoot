@@ -71,7 +71,7 @@ class AppointmentMapperTest {
         LocalDateTime start = LocalDateTime.now().plusDays(2).plusHours(9);
         LocalDateTime end   = LocalDateTime.of(2025, 6, 1, 15, 0);
         AppointmentDtoRequest dtoRequest = new AppointmentDtoRequest(
-                5L, 6L, 7L, start, end, AppointmentStatus.COMPLETED
+                5L, 6L, 7L, start, end
         );
 
         Appointment entity = mapper.toEntity(dtoRequest);
