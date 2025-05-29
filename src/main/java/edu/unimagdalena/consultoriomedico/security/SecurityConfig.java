@@ -56,6 +56,7 @@ public class SecurityConfig {
 
                         //Endpoints públicos
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        //.requestMatchers("/api/v1/**").permitAll()
 
                         //Endpoints con requisitos
 //                        .requestMatchers("/api/v1/patients/**").hasRole("PATIENT")
